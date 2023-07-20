@@ -1,0 +1,27 @@
+version: '3.9'
+services:
+  haji:
+    container_name: haji-transferer
+    image: haji-transferer:1.0.0
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    networks:
+      - haji
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+    depends_on:
+      - redis
+    env_file: .env
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    volumes:
+      - ./var/haji/redis-data:/data
+    networks:
+      - haji
+    restart: unless-stopped
+networks:
+  haji:
